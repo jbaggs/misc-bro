@@ -56,7 +56,7 @@ event bro_init() &priority=5
 	Analyzer::register_for_ports(Analyzer::ANALYZER_NTP, ports);
 	}
 
-event ntp_message(c: connection, msg: ntp_msg, excess: string)
+event ntp_message(c: connection, msg: ntp_msg, excess: string) &priority=5
 	{
 	local info: Info;
 	info$ts			=network_time();
@@ -77,7 +77,10 @@ event ntp_message(c: connection, msg: ntp_msg, excess: string)
 	info$excess		=excess;
 		
 	c$ntp = info;
+	}
 
+event ntp_message(c: connection, msg: ntp_msg, excess: string)
+	{
 	if ( logging )
 		Log::write(NTP::LOG, c$ntp);
 	}
